@@ -1,0 +1,64 @@
+services:
+  keycloak:
+#    image: bitnami/keycloak
+    image: keycloak/keycloak
+    container_name: keycloak_node
+    command:
+      - 'start-dev'
+    volumes:
+      - ./keycloak_data:/opt/keycloak/data
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_LOGLEVEL: DEBUG
+    ports:
+      - '8085:8080'
+    restart:
+      always
+    networks:
+      - lan1
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_node
+    hostname: mongodb
+    volumes:
+      - ./small_bank_init_mongodb.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./mongodb_data:/data/db/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: small_banks
+    ports:
+      - 27017:27017
+    networks:
+      - lan1
+
+  mongo_web:
+    image: mongo-express:latest
+    container_name: mongo_web_node
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: 'mongodb'
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+    ports:
+      - 8084:8081
+    depends_on:
+      - mongodb
+    networks:
+      - lan1
+
+volumes:
+  mongodb_data:
+    driver: local
+  keycloak_data:
+    driver: local
+
+networks:
+  lan1:
+    driver: bridge

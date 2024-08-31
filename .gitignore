@@ -1,0 +1,7 @@
+~\$*
+*.swp
+*.pyc
+**/logs/*
+docker/mongodb_data/
+docker/keycloak_data/
+.idea/
