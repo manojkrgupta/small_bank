@@ -1,7 +1,7 @@
 services:
   keycloak:
 #    image: bitnami/keycloak
-    image: keycloak/keycloak
+    image: keycloak/keycloak:25.0
     container_name: keycloak_node
     command:
       - 'start-dev'
@@ -20,7 +20,7 @@ services:
       - lan1
 
   mongodb:
-    image: mongo:latest
+    image: mongo:7.0.14
     container_name: mongodb_node
     hostname: mongodb
     volumes:
@@ -36,7 +36,7 @@ services:
       - lan1
 
   mongo_web:
-    image: mongo-express:latest
+    image: mongo-express:1.0.2
     container_name: mongo_web_node
     restart: always
     environment:

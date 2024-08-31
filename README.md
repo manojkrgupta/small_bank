@@ -1,3 +1,8 @@
+### Summary
+* An example of Python3 FastAPI, Keycloak and MongoDB. 
+* Keycloak takes care of accounts, access, permissions, privileges and session management, letting the application code very light and yet secured.
+* And yes, MongoDB supports atomic operations -- letting the logic to "check and debit (and also audit)" to work as one operation -- ensuring data integrity.
+
 ### Plan
 * The plan is to relinquish authentication from code and give it to standard IAM tools like keycloak.
 * User account management, Profile management, Roles, Group, Permissions etc all are moved to keycloak.
@@ -31,6 +36,10 @@
 | /bank_user/{bank}          | PUT    | to transact (credit or debit)      | account_owner    | bob, charlie                 |
 | /bank_teller/{bank}/{user} | PUT    | to create account for user in bank | bank_teller      | icici_teller, hdfc_teller    |
 | /bank_teller/{bank}/{user} | GET    | to get balance for every account   | bank_teller      | icici_teller, hdfc_teller    |
+
+### System dependencies
+* You need python3 version 3.10+.
+* And, you need to install necessary libraries by using command `python3 -m pip install -r requirements.txt`
 
 ### Start environment
 ```
